@@ -1,2 +1,2 @@
 # fourgame
-#I did some major changes
+#I did some major changes.
