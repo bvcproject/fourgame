@@ -134,17 +134,15 @@ namespace ConsoleApp52
         public int sign(int command, int[,] board)
         {
 
-            if (command <= 7 && command >= 0)
+            if (command <= 7 && command > 0) // choices are 1 to 7
             {
                 int row = 5; //this is the index of the lowest row/
                 while (row >= 0) // <- condition is while >= 0
                 {
-                    if (board[row, command - 1] == 0) // This means that row is vacant, lets investigate this
+                    if (board[row, command - 1] == 0) 
                     {
                         return row;
                     }
-
-                   
 
                     row--; // if filled, 0 will be -1
                 }
@@ -161,7 +159,7 @@ namespace ConsoleApp52
         {
 
             //check win for horizontal
-            //for horizontal, it is [0,1], [0,2], [0,3], [0,4]...we need to find a line of four. if you notice, the row doesnt change. so we can do this loop:
+            //for horizontal, it is [0,1], [0,2], [0,3], [0,4]...find a line of four. row doesnt change, so loop over column:
             for (int c = 0; c <= 3; c++)
             {
 
@@ -174,6 +172,7 @@ namespace ConsoleApp52
                     Console.WriteLine("Player " + playerNum.ToString() + " wins!");
                     return true;
                 }
+            }
 
             //check win for vertical
             
@@ -189,40 +188,122 @@ namespace ConsoleApp52
                 }
             }
 
-            //check win for diagonal
-            for (int i = 0; i < 4; i++)
+            //Check for diagonal win orientation: \
+
+            //look for boundary
+            int minRow = row;
+            int minCol = column;
+            while(minRow > 0 && minCol > 0) //Which is closer to the border
             {
-                for (int j = 0; j <= 4; j++)
+                minRow--;
+                minCol--;
+            }
+
+            int maxRow = row;
+            int maxCol = column;
+            while (maxRow < 5 && maxCol < 6) 
+            {
+                maxRow++;
+                maxCol++;
+            }
+          
+            if (maxRow - minRow >= 3) 
+            {
+                //use the smaller as the anchor
+                if (minRow < minCol)
                 {
-                    if (board[i, j] == 1 && board[i + 1, j + 1] == 1 && board[i + 2, j + 2] == 1 && board[i + 3, j + 3] == 1)
+                    //minRow is 0 so use this as starting
+                    for (int i = minRow; i +3 <= maxRow; i++)
                     {
-                        Console.WriteLine("Player " + playerNum.ToString() + " wins!");
-                        break;
+                        if (board[i, (minCol - minRow) + i] == playerNum &&
+                            board[i+1, (minCol - minRow) + i+1] == playerNum &&
+                            board[i+2, (minCol - minRow) + i+2] == playerNum &&
+                            board[i+3, (minCol - minRow) + i+3] == playerNum)
+                        {
+                            Console.WriteLine("Player " + playerNum.ToString() + " wins!");
+                            return true;
+                        }
+                    }
+                }
+                else //minRow >= minCol
+                {
+                    //minCol is 0 so use this as starting
+                    for (int i = minCol; i + 3 <= maxCol; i++)
+                    {
+                        if (board[(minRow - minCol) + i, i] == playerNum &&
+                            board[(minRow - minCol) + i+ 1, i+1] == playerNum &&
+                            board[(minRow - minCol) + i+ 2, i+2] == playerNum &&
+                            board[(minRow - minCol) + i+ 3, i+3] == playerNum)
+                        {
+                            Console.WriteLine("Player " + playerNum.ToString() + " wins!");
+                            return true;
+                        }
                     }
                 }
             }
 
-            
-             
+
+            //Check for diagonal win orientation: /
+            minRow = row;
+            maxCol = column;
+            while (minRow > 0 && maxCol < 6) //Which is closer to the border
+            {
+                minRow--;
+                maxCol++;
+            }
+
+            maxRow = row;
+            minCol = column;
+            while (maxRow < 5 && minCol > 0)
+            {
+                maxRow++;
+                minCol--;
+            }
+
+
+            if (maxRow - minRow >= 3)
+            {   
+                for (int i = minRow; i + 3 <= maxRow; i++)
+                {
+                    if (board[i, maxCol + minRow - i] == playerNum && 
+                        board[i + 1, maxCol + minRow - (i + 1)] == playerNum &&
+                        board[i + 2, maxCol + minRow - (i + 2)] == playerNum &&
+                        board[i + 3, maxCol + minRow - (i + 3)] == playerNum)
+                    {
+                        Console.WriteLine("Player " + playerNum.ToString() + " wins!");
+                        return true;
+                    }
+                }
+                
+            }
+
+            return false; 
         }
     }
     class Program
     {
         static void Main(string[] args)
         {
-            game mygame = new game();
-            mygame.Welcome();
-            mygame.PlayersInformationFunction();
-            Console.WriteLine();
 
-            gameboard myboard = new gameboard();
-            myboard.myboardfunction();
+            string command;
 
-            //game mygame = new game();
-            mygame.commandplayer(myboard);
-            //myboard.myboardfunction(); 
+            do
+            {
+                game mygame = new game();
+                mygame.Welcome();
+                mygame.PlayersInformationFunction();
+                Console.WriteLine();
 
-            Console.Read();
+                gameboard myboard = new gameboard();
+                myboard.myboardfunction();
+
+                //
+                mygame.commandplayer(myboard);
+
+                Console.WriteLine("You want to play again ?('Y')");
+                command = Console.ReadLine();
+            } while (command == "Y");
+            
         }
     }
 }
