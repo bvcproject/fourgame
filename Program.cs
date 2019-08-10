@@ -15,7 +15,7 @@ namespace ConsoleApp52
             p1name = Console.ReadLine();
             Console.Write("Enter the name of second player:-");
             p2name = Console.ReadLine();
-
+            
         }
     }
     class gameboard
@@ -36,13 +36,13 @@ namespace ConsoleApp52
 
         public void myboardfunction()
         {
-
+            
             // This will print per row
             for (int row = 0; row < 6; row++)
             {
                 //First, print the border at the left:
                 Console.Write("|");
-
+                
                 // This will print each column of array
                 for (int column = 0; column < 7; column++)
                 {
@@ -63,18 +63,18 @@ namespace ConsoleApp52
                     }
                 }
 
-
+               
                 Console.WriteLine("|");
             }
-
+          
             Console.WriteLine("  1  2  3  4  5  6  7");
 
-
+            
         }
     }
     class game : Players
     {
-        public int command1, command2;
+        public int command1, command2;           
 
         public void commandplayer(gameboard board)
         {
@@ -100,9 +100,9 @@ namespace ConsoleApp52
                 board.Board[row, column] = 1; // And we will assign the sign of player 1
                 board.myboardfunction();
 
-                if (winner(1, row, column, board.Board))
+                if(winner(1, row, column, board.Board))
                     break;
-
+                
                 turn++;
 
                 do
@@ -129,7 +129,7 @@ namespace ConsoleApp52
                 //game is draw
                 Console.WriteLine("Game draw.");
             }
-
+            
         }
         public int sign(int command, int[,] board)
         {
@@ -139,20 +139,20 @@ namespace ConsoleApp52
                 int row = 5; //this is the index of the lowest row/
                 while (row >= 0) // <- condition is while >= 0
                 {
-                    if (board[row, command - 1] == 0)
+                    if (board[row, command - 1] == 0) 
                     {
                         return row;
                     }
 
                     row--; // if filled, 0 will be -1
                 }
-
+              
                 Console.WriteLine("column selected is already full");
             }
 
             Console.WriteLine("your number should be less than or equal to 7");
             return -1;
-
+            
         }
 
         public bool winner(int playerNum, int row, int column, int[,] board)
@@ -175,13 +175,13 @@ namespace ConsoleApp52
             }
 
             //check win for vertical
-
+            
             for (int c = 0; c <= 2; c++)
             {
-                if (board[c, column] == playerNum &&
-                    board[c + 1, column] == playerNum &&
-                    board[c + 2, column] == playerNum &&
-                    board[c + 3, column] == playerNum)
+                if(board[c,column]==playerNum &&   
+                    board[c+1,column]==playerNum   &&    
+                    board[c+2,column]==playerNum  && 
+                    board[c+3, column] == playerNum)
                 {
                     Console.WriteLine("Player " + playerNum.ToString() + " wins!");
                     return true;
@@ -193,7 +193,7 @@ namespace ConsoleApp52
             //look for boundary
             int minRow = row;
             int minCol = column;
-            while (minRow > 0 && minCol > 0) //Which is closer to the border
+            while(minRow > 0 && minCol > 0) //Which is closer to the border
             {
                 minRow--;
                 minCol--;
@@ -201,24 +201,24 @@ namespace ConsoleApp52
 
             int maxRow = row;
             int maxCol = column;
-            while (maxRow < 5 && maxCol < 6)
+            while (maxRow < 5 && maxCol < 6) 
             {
                 maxRow++;
                 maxCol++;
             }
-
-            if (maxRow - minRow >= 3)
+          
+            if (maxRow - minRow >= 3) 
             {
                 //use the smaller as the anchor
                 if (minRow < minCol)
                 {
                     //minRow is 0 so use this as starting
-                    for (int i = minRow; i + 3 <= maxRow; i++)
+                    for (int i = minRow; i +3 <= maxRow; i++)
                     {
                         if (board[i, (minCol - minRow) + i] == playerNum &&
-                            board[i + 1, (minCol - minRow) + i + 1] == playerNum &&
-                            board[i + 2, (minCol - minRow) + i + 2] == playerNum &&
-                            board[i + 3, (minCol - minRow) + i + 3] == playerNum)
+                            board[i+1, (minCol - minRow) + i+1] == playerNum &&
+                            board[i+2, (minCol - minRow) + i+2] == playerNum &&
+                            board[i+3, (minCol - minRow) + i+3] == playerNum)
                         {
                             Console.WriteLine("Player " + playerNum.ToString() + " wins!");
                             return true;
@@ -231,9 +231,9 @@ namespace ConsoleApp52
                     for (int i = minCol; i + 3 <= maxCol; i++)
                     {
                         if (board[(minRow - minCol) + i, i] == playerNum &&
-                            board[(minRow - minCol) + i + 1, i + 1] == playerNum &&
-                            board[(minRow - minCol) + i + 2, i + 2] == playerNum &&
-                            board[(minRow - minCol) + i + 3, i + 3] == playerNum)
+                            board[(minRow - minCol) + i+ 1, i+1] == playerNum &&
+                            board[(minRow - minCol) + i+ 2, i+2] == playerNum &&
+                            board[(minRow - minCol) + i+ 3, i+3] == playerNum)
                         {
                             Console.WriteLine("Player " + playerNum.ToString() + " wins!");
                             return true;
@@ -262,10 +262,10 @@ namespace ConsoleApp52
 
 
             if (maxRow - minRow >= 3)
-            {
+            {   
                 for (int i = minRow; i + 3 <= maxRow; i++)
                 {
-                    if (board[i, maxCol + minRow - i] == playerNum &&
+                    if (board[i, maxCol + minRow - i] == playerNum && 
                         board[i + 1, maxCol + minRow - (i + 1)] == playerNum &&
                         board[i + 2, maxCol + minRow - (i + 2)] == playerNum &&
                         board[i + 3, maxCol + minRow - (i + 3)] == playerNum)
@@ -274,10 +274,10 @@ namespace ConsoleApp52
                         return true;
                     }
                 }
-
+                
             }
 
-            return false;
+            return false; 
         }
     }
     class Program
@@ -302,8 +302,8 @@ namespace ConsoleApp52
 
                 Console.WriteLine("You want to play again ?('Y')");
                 command = Console.ReadLine();
-            } while (command == "Y");
-
+            } while (command == "Y"||command=="y");
+            
         }
     }
 }
